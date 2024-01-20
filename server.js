@@ -18,7 +18,12 @@ App.use(bodyparser.urlencoded({
 App.use(bodyparser.json());
 
 App.set('views', path.join(__dirname, '/views/'));
-App.engine('hbs', exphbs({ extname: 'hbs', defaultLayout: 'mainLayout', layoutsDir: __dirname + '/views/layouts/' }));
+const hbs = exphbs.create({
+    extname: 'hbs',
+    defaultLayout: 'mainLayout',
+    layoutsDir: __dirname + '/views/layouts/'
+});
+App.engine('hbs', hbs.engine);
 App.set('view engine', 'hbs');
 
 mongoose.connect(process.env.MONGODB_URI, {
