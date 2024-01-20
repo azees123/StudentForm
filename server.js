@@ -1,4 +1,7 @@
-require('./models/db');
+require('dotenv').config();
+require('./models/employee.model');
+const mongoose = require('mongoose');
+
 
 const express = require('express');
 const path = require('path');
@@ -18,8 +21,21 @@ App.set('views', path.join(__dirname, '/views/'));
 App.engine('hbs', exphbs({ extname: 'hbs', defaultLayout: 'mainLayout', layoutsDir: __dirname + '/views/layouts/' }));
 App.set('view engine', 'hbs');
 
-App.listen(3000, () => {
-    console.log('Express server started at port : 3000');
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false
+}, (err) => {
+    if (!err) {
+        console.log('MongoDB Connection Succeeded');
+    } else {
+        console.log('Error in DB connection : ' + err);
+    }
+});
+
+const port = process.env.PORT || 3000;
+App.listen(port, () => {
+    console.log(`Express server started at port: ${port}`);
 });
 
 App.use('/employee', employeeController);
